@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
-# Configires Nginx server with deploymeny folders
-apt-get update -y
-apt-get install -y nginx
-mkdir -p /data/web_static/releases/ /data/web_static/shared/ /data/web_static/releases/test/
-echo "<h1>AirBnB but in /releases/test</h1>" > /data/web_static/releases/test/index.html
-ln -sf /data/web_static/releases/test/ /data/web_static/current
-chown -R ubuntu:ubuntu /data/
-# Write after the error declaration
-sed -i "/error_page 404 \/404.html;/a \\\n\tlocation /hbnb_static { \
-        \n\t\talias /data/web_static/current/; \
-        \n\t\tautoindex off; \
-        \n\t}" /etc/nginx/sites-available/default
-# restart nginx
-service nginx restart
+# sets up your web servers for the deployment of web_static.
+sudo apt-get update
+sudo apt-get -y install nginx
+sudo mkdir -p /data/web_static/shared/ /data/web_static/releases/test/
+sudo echo "<html>
+  <head>
+  </head>
+  <body>
+	Holberton School
+  </body>
+</html>" | sudo tee /data/web_static/releases/test/index.html
+sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
+sudo chown -R ubuntu:ubuntu /data
+sudo sed -i '53i \\tlocation \/hbnb_static {\n\t\t alias /data/web_static/current;\n\t}' /etc/nginx/sites-available/default
+/etc/init.d/nginx restart
